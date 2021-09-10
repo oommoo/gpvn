@@ -17,6 +17,9 @@
  *           - changed dynamic predicate declaration syntax,
  *           - rename index to avoid name collision and
  *           - constant definitions for sentance variables.
+ * UPDATED:  Fri 10 Sep 2021 12:44:30 PM EDT
+ * NOTES..:  modified to run under gprolog 1.5.0 
+ *           - changes assert/1 to asserta/1
  */
  
 public(
@@ -316,16 +319,16 @@ counter_example(_,Other_polarity) :-
 */
 
 go :- 
-   do_n_value('pv4.tbl',b),
-   assert(transindex(0)),
-   assert(var_data([[z,index]])).
+   do_n_value('pv4.df4',b),
+   asserta(transindex(0)),
+   asserta(var_data([[z,index]])).
 
 do_n_value(Logic,Xtra) :-
     empty_table,
     write('Loading - '),
     write(Logic),
     consult(Logic),
-    assert(define(Logic)).
+    asserta(define(Logic)).
    
 
 
