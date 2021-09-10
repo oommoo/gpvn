@@ -1,0 +1,42 @@
+/** $Header: /cvsroot/gpvn/prolog/ax7.ax,v 1.2 2001/09/12 04:41:33 oommoo Exp $
+ */
+
+
+/* simplification of disjunctive antecedents */
+ax(  
+      (((a v b) > c) > ((a > c) & (b > c)))
+  ).
+/* simplification of conjunction */
+ax(   
+      ((d & e) > d)
+  ).
+/* monotonicity */
+ax(   
+      ((f > g) > ((f & h) > g))  
+  ).
+
+ax(  ( 
+      (((a v b) > c) > ((a > c) & (b > c)))
+       & 
+      ((d & e) > d)
+     )  
+       >  
+      ((f > g) > ((f & h) > g))  
+  ).
+
+
+/* . . . misc . . . 
+*/
+/* transitivity 
+      (((a > b) &  (b > c)) > (a > c) )
+*/
+/* relevance
+      (((d > e) & ^(f > e)) > (d > f) )
+*/
+
+/*
+ * $Log: ax7.ax,v $
+ * Revision 1.2  2001/09/12 04:41:33  oommoo
+ * RCS decorations to capture version information.
+ *
+ */

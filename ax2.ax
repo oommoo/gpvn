@@ -1,0 +1,15 @@
+/** $Header: /cvsroot/gpvn/prolog/ax2.ax,v 1.2 2001/09/12 04:41:33 oommoo Exp $
+ */
+
+ax(((a > b) & (b > c)) > (a > c)).
+ax(((a > b) > ((a & c) > b))).
+ax((((a > b) & (b > c)) > (a > c)) > ((d > e) > ((d & f) > e))).
+ax( ((((a > b) & (b > c)) > (a > c)) > ((d > e) > ((d & f) > e))) > (a > a) ).
+
+
+/*
+ * $Log: ax2.ax,v $
+ * Revision 1.2  2001/09/12 04:41:33  oommoo
+ * RCS decorations to capture version information.
+ *
+ */

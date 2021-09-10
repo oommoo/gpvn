@@ -1,0 +1,140 @@
+/** $Header: /cvsroot/gpvn/prolog/pv4.df2,v 1.2 2001/09/12 04:41:33 oommoo Exp $
+ *
+ * PROGRAM:  Classical two valued logic (L2)
+ * DATE...:  9.18.87
+ * UPDATED:  4.4.89
+ * AUTHORS:  CVBII & PBMVIII
+ * PURPOSE:  a two valued semantics
+ * NOTES..:  to be loaded under PV4.exe :
+ */
+
+/* These clauses define the operators that are valid for this logic.  */
+define(>,imp).
+define(@,imp).
+define(&,conj).
+define(v,dis).
+define(^,neg).
+
+/* These are the polarities that are run under this logic.   */
+
+polarity(t).
+polarity(f).
+
+/*=====================================================================*
+ *--------------------  Interpretation clauses  -----------------------*
+ *=====================================================================*
+
+ *------------------------  implication  ------------------------------*
+ *
+ *  The symbol for implication is 'imp(Antecedant,Concequent)'
+ *  The semantic interpretation for implication is given by the
+ *  following matrix where the rows are for the antecedant and
+ *  the columns are for the consequent
+ *
+ *                    t f
+ *                 ฺฤฤฤฤฤฤ
+ *               t ณ  t f
+ *               f ณ  t t
+ *
+ *------------------------  implication  ------------------------------*
+ *
+ *  The preceding matrix can be represented with the following table   *
+ *  where the table predicate has the following format                 *
+ *     define(Operator,Result,Operand_one,Operand_two)                  */
+
+
+/* row 1 */
+define(imp,t,t,t).
+define(imp,f,t,f).
+
+/* row 2 */
+define(imp,t,f,t).
+define(imp,t,f,f).
+
+/* -----------------------  conjunction  -------------------------------*
+ *
+ *    The symbol for conjunction is 'and(First_conjunct,Second_conjunct)'
+ *
+ *                    t f
+ *                  ฺฤฤฤฤฤ
+ *               t  ณ t f
+ *               f  ณ f f
+ *
+ * -----------------------  conjunction  -------------------------------*
+ *
+ *  The preceding matrix can be represented with the following table    *
+ *  where the table predicate has the following format                  *
+ *     define(Operator,Result,Operand_one,Operand_two)                   *
+ *                                                                      */
+
+/* row 1 */
+define(conj,t,t,t).
+define(conj,f,t,f).
+
+/* row 2 */
+define(conj,f,f,t).
+define(conj,f,f,f).
+
+/* -----------------  disjunction  --------------------------------*
+ *
+ *     The symbol for disjunction is 'dis(First_disjunct,Second_disjunct)'
+ *
+ *                    t f
+ *                  ฺฤฤฤฤฤ
+ *               t  ณ t t
+ *               f  ณ t f
+ *
+ * -----------------  disjunction  --------------------------------*
+ *
+ *  The preceding matrix can be represented with the following table    *
+ *  where the table predicate has the following format                  *
+ *     define(Operator,Result,Operand_one,Operand_two)                   *
+ *                                                                      */
+
+/* row 1 */
+define(dis,t,t,t).
+define(dis,t,t,f).
+
+/* row 2 */
+define(dis,t,f,t).
+define(dis,f,f,f).
+
+/* ------------------  negation  ---------------------------------*
+ *
+ *      The symbol for negation is 'neg(Formula)'.
+ *                  ฺฤฤ
+ *               t  ณ f
+ *               f  ณ t
+ *
+ *           'iv(expression,value)' stands for the interpretation
+ *           function of a well formed formula
+ *
+ *
+ * ------------------  negation  ---------------------------------*
+ *
+ *  The preceding matrix can be represented with the following table    *
+ *  where the table predicate has the following format                  *
+ *     define(Operator,Result,Operand)                                   *
+ *                                                                      */
+
+define(neg,t,f).
+define(neg,f,t).
+
+/*====================================*/
+/* defines in matrix form for display */
+/*====================================*/
+define_matrix('        ษอออออัอออออัอออออป').
+define_matrix('        บ t f ณ t f ณ t f บ').
+define_matrix('    ษอออฮอออออุอออออุอออออน').
+define_matrix('    บ ^ บ  &  ณ  v  ณ  >  บ').
+define_matrix('ษอออฮอออฮอออออุอออออุอออออน').
+define_matrix('บ t บ f บ t f ณ t t ณ t f บ').
+define_matrix('บ f บ t บ f f ณ t f ณ t t บ').
+define_matrix('ศอออสอออสอออออฯอออออฯอออออผ').
+
+/*
+ * $Log: pv4.df2,v $
+ * Revision 1.2  2001/09/12 04:41:33  oommoo
+ * RCS decorations to capture version information.
+ *
+ */

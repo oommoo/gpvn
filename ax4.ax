@@ -1,0 +1,30 @@
+/** $Header: /cvsroot/gpvn/prolog/ax4.ax,v 1.2 2001/09/12 04:41:33 oommoo Exp $
+ */
+
+ax( a > a ).
+ax(  (a > b) @ ((a & c) > b) ).
+ax(  ((a > b) & (b > c)) @ (a > c) ).
+ax(  (a > (b @ c)) @ ((a > b) @ (a > c)) ).
+ax(  (a > b) @ (a @ b) ).
+ax(  ((a & b) > c) @ ((a > b) @ (a > c)) ).
+ax(  (^(a & b) > c) @ ((^a > c) & (^b > c)) ).
+ax( ^(^a) > a ). 
+ax(  (a v b) > (b v a) ). 
+ax(  (a & b) > (b & a) ). 
+ax(  (a > b) > (^b > ^a) ).
+ax(  (a > b) > (a > (b v ^b)) ). 
+ax(  ((a > b) & (a > ^b)) > (a > (b & ^b)) ).
+ax(  ((a & b) > c) @ (a > (b > c)) ).
+
+ax(  ((a > b) & (b > c)) > (a > c) ).
+ax(  a > (b > a) ).
+ax(  ((a & b) & c) > (a & (b & c)) ).
+
+/*
+ * $Log: ax4.ax,v $
+ * Revision 1.2  2001/09/12 04:41:33  oommoo
+ * RCS decorations to capture version information.
+ *
+ */
+
+

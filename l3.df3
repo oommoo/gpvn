@@ -1,0 +1,209 @@
+/** $Header: /cvsroot/gpvn/prolog/l3.df3,v 1.2 2001/09/12 04:41:33 oommoo Exp $
+ *
+ * PROGRAM:  Lukasiewicz (L3) definition file		
+ * DATE...:  90.9.3
+ * UPDATED:  90.9.3
+ * AUTHORS:  CVBII & PBMVIII
+ * PURPOSE:  Lukasiewicz's three valued semantics
+ * NOTES..:  to be loaded under PV4.exe :
+ */
+
+/* These clauses define the operators that are valid for this logic.  */
+define(>,imp).
+define(@,mat_imp).
+define(&,conj).
+define(v,dis).
+define(^,neg).
+
+/* These are the polarities that are run under this logic.   */
+
+polarity(t).
+polarity(f).
+polarity(u).
+
+/*=====================================================================*
+ *--------------------  Interpretation clauses  -----------------------*
+ *=====================================================================*
+
+ *------------------------  implication  ------------------------------*
+ *
+ *  The symbol for implication is 'imp(Antecedant,Concequent)'
+ *  The semantic interpretation for implication is given by the
+ *  following matrix where the rows are for the antecedant and
+ *  the columns are for the consequent
+ *
+ *                    t f u
+ *                 ฺฤฤฤฤฤฤฤฤฤ
+ *               t ณ  t f u
+ *               f ณ  t t t
+ *               u ณ  t u t
+ *                 ณ 
+ *
+ *------------------------  implication  ------------------------------*
+ *
+ *  The preceding matrix can be represented with the following table   *
+ *  where the table predicate has the following format                 *
+ *     define(Operator,Result,Operand_one,Operand_two)                 */
+
+
+/* row 1 */
+define(imp,t,t,t).
+define(imp,f,t,f).
+define(imp,u,t,u).
+
+
+/* row 2 */
+define(imp,t,f,t).
+define(imp,t,f,f).
+define(imp,t,f,u).
+
+
+/* row 3 */
+define(imp,t,u,t).
+define(imp,u,u,f).
+define(imp,t,u,u).
+
+
+/*------------------- material  implication  ----------------------*
+ *
+ *  The symbol for implication is 'mat_imp(Antecedant,Concequent)'
+ *  The semantic interpretation for implication is given by the
+ *  following matrix where the rows are for the antecedant and
+ *  the columns are for the consequent
+ *
+ *                    t f
+ *                 ฺฤฤฤฤฤฤ
+ *               t ณ  t f
+ *               f ณ  t t
+ *
+ *---------------------------------------------------------------------*
+ *
+ *  The preceding matrix can be represented with the following table   *
+ *  where the table predicate has the following format                 *
+ *     define(Operator,Result,Operand_one,Operand_two)                 */
+
+
+/* row 1 */
+define(mat_imp,t,t,t).
+define(mat_imp,f,t,f).
+
+/* row 2 */
+define(mat_imp,t,f,t).
+define(mat_imp,t,f,f).
+
+/* -----------------------  conjunction  -------------------------------*
+ *
+ *    The symbol for conjunction is 'and(First_conjunct,Second_conjunct)'
+ *
+ *                    t f u  
+ *                  ฺฤฤฤฤฤฤฤฤฤ
+ *               t  ณ t f u 
+ *               f  ณ f f f 
+ *               u  ณ u f u 
+ *                  ณ 
+ *
+ * -----------------------  conjunction  -------------------------------*
+ *
+ *  The preceding matrix can be represented with the following table    *
+ *  where the table predicate has the following format                  *
+ *     define(Operator,Result,Operand_one,Operand_two)                   *
+ *                                                                      */
+
+/* row 1 */
+define(conj,t,t,t).
+define(conj,f,t,f).
+define(conj,u,t,u).
+
+
+/* row 2 */
+define(conj,f,f,t).
+define(conj,f,f,f).
+define(conj,f,f,u).
+
+
+
+/* row 3 */
+define(conj,u,u,t).
+define(conj,f,u,f).
+define(conj,u,u,u).
+
+
+
+/* -----------------  disjunction  --------------------------------*
+ *
+ *     The symbol for disjunction is 'dis(First_disjunct,Second_disjunct)'
+ *
+ *                    t f u 
+ *                  ฺฤฤฤฤฤฤฤฤฤ
+ *               t  ณ t t t 
+ *               f  ณ t f u 
+ *               u  ณ t u u 
+ *                  ณ 
+ *
+ * -----------------  disjunction  --------------------------------*
+ *
+ *  The preceding matrix can be represented with the following table    *
+ *  where the table predicate has the following format                  *
+ *     define(Operator,Result,Operand_one,Operand_two)                   *
+ *                                                                      */
+
+/* row 1 */
+define(dis,t,t,t).
+define(dis,t,t,f).
+define(dis,t,t,u).
+
+/* row 2 */
+define(dis,t,f,t).
+define(dis,f,f,f).
+define(dis,u,f,u).
+
+/* row 3 */
+define(dis,t,u,t).
+define(dis,u,u,f).
+define(dis,u,u,u).
+
+
+/* ------------------  negation  ---------------------------------*
+ *
+ *      The symbol for negation is 'neg(Formula)'.
+ *                  ฺฤฤ
+ *               t  ณ f
+ *               f  ณ t
+ *               u  ณ u
+ *                  ณ 
+ *
+ *           'iv(expression,value)' stands for the interpretation
+ *           function of a well formed formula
+ *
+ *
+ * ------------------  negation  ---------------------------------*
+ *
+ *  The preceding matrix can be represented with the following table    *
+ *  where the table predicate has the following format                  *
+ *     define(Operator,Result,Operand)                                   *
+ *                                                                      */
+
+define(neg,t,f).
+define(neg,f,t).
+define(neg,u,u).
+
+
+/*====================================*/
+/* defines in matrix form for display */
+/*====================================*/
+define_matrix('        ษอออออออัอออออออัอออออออัอออออป').
+define_matrix('        บ t f u ณ t f u ณ t f u ณ t f บ').
+define_matrix('    ษอออฮอออออออุอออออออุอออออออุอออออน').
+define_matrix('    บ ^ บ    &  ณ    v  ณ    >  ณ  @  บ').
+define_matrix('ษอออฮอออฮอออออออุอออออออุอออออออุอออออน').
+define_matrix('บ t บ f บ t f u ณ t t t ณ t f u ณ t f บ').
+define_matrix('บ f บ t บ f f f ณ t f u ณ t t t ณ t t บ').
+define_matrix('บ u บ u บ u f u ณ t u u ณ t u t ณ     บ').
+define_matrix('ศอออสอออสอออออออฯอออออออฯอออออออฯอออออผ').
+
+/*
+ * $Log: l3.df3,v $
+ * Revision 1.2  2001/09/12 04:41:33  oommoo
+ * RCS decorations to capture version information.
+ *
+ */

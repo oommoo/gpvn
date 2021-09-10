@@ -1,0 +1,96 @@
+/** $Header: /cvsroot/gpvn/prolog/ax5.ax,v 1.2 2001/09/12 04:41:33 oommoo Exp $
+ */
+
+/*
+   Three theorums schema are of interest :
+   transitivity, relevance, and monotonicity.
+*/ 
+
+ax(  ((a > b) & (b > c)) > (a > c)    ).
+ax(  ((a > b) & ^(c > b)) > (a > c)   ).
+ax(  (a > b) > ((a & c) > b)          ).
+
+ax(  ((a > b) & (b > c)) @ (a > c)    ).
+ax(  ((a > b) & ^(c > b)) @ (a > c)   ).
+ax(  (a > b) @ ((a & c) > b)          ).
+
+ax(  (
+        (
+           ((a > b) & (b > c)) > (a > c)
+        ) &
+        (
+           ((a > b) & ^(c > b)) > (a > c)
+        )
+     ) >
+     (
+        (a > b) > ((a & c) > b)
+     )
+  ).
+ax(  (
+        (
+           (a > b) > ((a & c) > b)
+        ) &
+        (
+           ((a > b) & ^(c > b)) > (a > c)
+        )
+     ) >
+     (
+        ((a > b) & (b > c)) > (a > c)
+     )
+  ).
+ax(  (
+        (
+           (a > b) > ((a & c) > b)
+        ) &
+        (
+           ((a > b) & (b > c)) > (a > c)
+        )
+     ) >
+     (
+        ((a > b) & ^(c > b)) > (a > c)
+     )
+  ).
+
+ax(  (
+        (
+           ((a > b) & (b > c)) > (a > c)
+        ) &
+        (
+           ((a > b) & ^(c > b)) > (a > c)
+        )
+     ) @
+     (
+        (a > b) > ((a & c) > b)
+     )
+  ).
+ax(  (
+        (
+           (a > b) > ((a & c) > b)
+        ) &
+        (
+           ((a > b) & ^(c > b)) > (a > c)
+        )
+     ) @
+     (
+        ((a > b) & (b > c)) > (a > c)
+     )
+  ).
+ax(  (
+        (
+           (a > b) > ((a & c) > b)
+        ) &
+        (
+           ((a > b) & (b > c)) > (a > c)
+        )
+     ) @
+     (
+        ((a > b) & ^(c > b)) > (a > c)
+     )
+  ).
+
+/*
+ * $Log: ax5.ax,v $
+ * Revision 1.2  2001/09/12 04:41:33  oommoo
+ * RCS decorations to capture version information.
+ *
+ */

@@ -1,0 +1,13 @@
+/* $Header: /cvsroot/gpvn/prolog/axioms.ax,v 1.2 2001/09/12 04:41:33 oommoo Exp $
+ *
+ */
+ax(a > a).
+ax((a > b) > (b > a)).
+ax(a > ^(^a)).
+
+/*
+ * $Log: axioms.ax,v $
+ * Revision 1.2  2001/09/12 04:41:33  oommoo
+ * RCS decorations to capture version information.
+ *
+ */

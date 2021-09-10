@@ -1,0 +1,394 @@
+<!-- $Header: /cvsroot/gpvn/prolog/doc/html/gpv4.html,v 1.2 2002/08/31 20:18:56 oommoo Exp $ -->
+<h1>GNU Polarity Valuation 4-Values</h1>
+<p>
+<h2>1.Introduction</h2>
+<p>
+Propositions, declaritive statements, possible utterances, all are presumed to have logical interpretations.
+A truth functional interpretation of utterances commonly maps from a set of utterances into a set of truth values.
+For example the statement "the dog has fleas" is generally considered to be the type of statement that can either be determined to be true or determined to be false.
+However, the statement "the dog will have fleas next week" can not be determined until next week.
+This criticism, traced to Aristotle, of classical truth functional semantics is based on the incompleteness of a two valued interpretation.
+This is known historically as the problem of future contingents<a href="#[0]">[0]</a>.
+While it is perfectly clear what the statement means, it cannot be determined to be true or determined to be false.
+This leads to truth value gaps in the classical analysis.
+Another sort of undecidable statement is the sort Godel produced.
+That is, formally undecidable statements.
+While future contingent statements and formally undecided statements are different sorts of statements, the end result is the same.
+Namely, both leave the epistemic system in an undecided state.
+The last type of statement or declarative utterance one might be confronted with is one where (i) either lack of appropriate vocabulary (ii) inability to grammatically piece together the utterance into a semantically meaningful statement or (iii) both grammaticallity and lexical information are sufficient, but incongruity of meanings prohibits understanding.
+These types of statements are considered meaningless.
+</p>
+<p>
+In this paper we develop a four valued (true, false, undecided, meaningless) sentential epistemic logic (PV4), which we describe and implement in the programming language PROLOG implementation gpvn <a href="#[1]">[1]</a>.
+Although this paper naturally has two parts, the development of the formal system and the implementation, these two parts are intertwined throughout the paper.
+Thus the development of the program is not ?analogous? to developing a formal system, but actually ?is? developing such a system.
+ We offer arguments for this particular semantic interpretation.
+<p>
+We feel this work is important in at least three ways.
+First the structures that we develop in PROLOG are an elegant representation of an 4-valued truth functional logic.
+Second, we feel that this logic (or something similar) will be the kernal of any general inferencing system.
+That is, since we as humans can reason perfectly well with respect to statements with these sorts of values, any theory that proposes to describe human inferenceing will have to include a multivalued sentential logic.
+Lastly, we provide a general theory and enviroment for generating multivalued logics computationally.
+                                          
+
+<h2>1.1.Terminology</h2>
+
+<p>
+In this section we want to introduce the terminology and some concepts that we use in what follows.
+This will include discussions of Gnomic extensions to a logic as well as the interpretation function and will introduce the matrix format for truth functional semantics.
+
+<h2>1.2.Multivalued Logic</h2>
+
+<p>
+The modern era has seen the proliferation of three, four, and  generally n-valued logics.
+The first logicians in modern times to  deal extensivley with many valued logics were Lukasiewicz and Post in the early 1920s.
+Since then many valued logics have been  studied and applied in areas varying from epistemic logics to models intended to represent quantum phenomena.
+Of all the 3-valued  logics, three have had the most profound and lasting effect.
+Thus we are justified in narrowing our scope to these three.
+The  different types of 3-valued logics are distinguished by the different intended interpretations of the third value.
+The three  interpretations that are the standard, and with which we will start our discussion of 3-valued logics are:
+
+<ol>
+    <li>
+                indeterminate
+    <li>
+                undecided
+    <li>
+                meaningless
+</ol>
+
+<p>
+Each of these correspond to a particular set of matrices.
+The first of these is the logic originally discovered by  Lukasiewicz.
+Following the form Rescher uses, we may illustrate the defining matrices for the Lukasiewicz 3-valued system (hereafter L3).
+
+<pre>
+              +---------+---------+---------+---------+
+              |  T I F  |  T I F  |  T I F  |  T I F  |
+        +-----+---------+---------+---------+---------+
+        | ~p  |  p & q  |  p v q  |  p -> q | p <-> q |
+    +---+-----+---------+---------+---------+---------+
+    | T |  F  |  T I F  |  T T T  |  T I F  |  T I F  |
+    | I |  I  |  I I F  |  T I I  |  T T I  |  I T I  |
+    | F |  T  |  F F F  |  T I F  |  T T T  |  F I T  |
+    +---+-----+---------+---------+---------+---------+
+</pre>
+
+<p>
+L3 was developed because of the need to represent future  contingent statements.
+The third value is designed to represent indeterminacy.
+Notice that any of the operators  can be construed as a function that maps from two truth values to  one truth value.
+
+
+<p>
+It is in fact this conditional operator that distinguishes L3 from a 3-valued system developed by Kleene.
+The Kleene system (K3) was developed to accommodate undecidable mathematical statements.
+The third assignment in this system intuitively represents partial ignorance.
+The only formal difference is in the conditional and biconditional operators.
+In K3 these operators look like this:
+
+<pre>
+        +---------+---------+
+        | T  U  F | T  U  F |
+        +---------+---------+
+        | p -> q  | p <-> q |
+    +-------------+---------+
+    | T |  T U F  |  T U F  |
+    | U |  T U U  |  U U U  |
+    | F |  T T T  |  F U T  |
+    +---+---------+---------+
+</pre>
+
+<p>
+The difference between L3 and K3 has been characterized by Turner as follows.
+ 
+
+<blockquote>
+"  ...the interpretation of I differs from that of U: an assignment of U (K3) represents a truth-value gap whereas an assignment of I (L3) signifies that the statement cannot be assigned the value true or false; it is not simply that we do not have sufficient information available to decide the truth value but rather the statement does not have one."
+</blockquote>
+
+<p>The last system we will look at is the Bochvar system B½3.
+L3 and K3 are meant to represent notions that are related and therefore are somewhat similar.
+B3 is different.
+The third value in the B3 system is designed to represent meaninglessness.
+The third value in B3 is infectious.
+This means that if either side of any of the operators have M as it's value, the whole compound statement takes M as it's value.
+Thus we have the following.
+<pre>      
+          +---------+---------+---------+---------+
+          |  T M F  |  T M F  |  T M F  |  T M F  |
+          +---------+---------+---------+---------+
+          |  p & q  |  p v q  |  p -> q | p <-> q |
+      +---+---------+---------+---------+---------+
+      | T |  T M F  |  T M T  |  T M F  |  T M F  |
+      | M |  M M M  |  M M M  |  M M M  |  M M M  |
+      | F |  F M F  |  T M F  |  T M T  |  F M T  |
+      +---+---------+---------+---------+---------+
+</pre>
+       
+B3 has the same negation as L3 and K3.
+
+<p>Before we leave this section we should discuss modern developments in algebraic semantics.
+ Our source here is primarily Nute's ?Topics in Conditional Logic?.
+
+<h2>1.2.Four Values</h2>
+
+<p>It seems intuitive to us that a declarative statement uttered at time t is assigned one of four values from epistemic system E at time t1.
+The value assigned is an element of the set {true,false,undecided,meaningless}.
+A discussion of the assignment function in E is outside the scope of this paper.
+It will help to understand what follows though if I briefly outline our intuitions concerning assignment of valuation.
+
+<p>     
+    When a speaker utters a statement S that the hearer belives to be factual, the hearer assigns S a value of true.
+Similarly, if the hearer believes S to be non©factual S is assigned the value false.
+When the hearer understands the sentence but for some reason (lack of information or impossibility of determining factuality of claim) does not assign the value true or false, then S is assigned the value undecided.
+If the sentence is not understood (either through failure to parse i.e.
+grammatical failure, or through the words simply not being in the hearers lexicon) then S is assigned the value meaningless.
+We claim that these four values represent a complete list of assignments that a declaritive utterance can recieve.
+
+   Whatever the values of S1...Sn, they can still be combined using the standard sentential operators {&, v, ©>, <©>, áªá}.
+ Thus for example, where S1 and S2 both have the value true, the statement
+<p>        S1 & S2
+is true.
+We now discuss the rational behind our interpetation of the operators.
+
+   The interpretation for implication is given by the following matrix where the rows are for the antecedant and the columns are for the consequent:
+<p>    
+<p> >    t f u m
+<p>   +---------
+<p> t |  t f u u
+<p> f |  t t t t
+<p> u |  t u t m
+<p> m |  t u m t
+
+Thus given that S1 = "p ©> q", and Iv(p) = u and Iv(q) = f then Iv(S1) = u.
+ Hereafter we will refer to the "true" value with the letter t, the "false" value with the letter f, the "undecided" value with the letter u and the "meaningless" value with the letter m.
+ Notice that our matrix for implication is a superset of the standard two valued analysis.
+That is, when the values u and m are ignored the matrix of our implication is reduced to the so called material implication of two valued system.
+This will hold true for all of our operators i.e.
+our logic (pv4) minus m and u reduces to standard two valued sentential logic (sl).
+
+<p>It is readily observable that we have maintained the standard conventions of interpretation concerning false antecedents and true^Kconsequents.
+That is, whenever the antecedent has the value f or the consequent has the value t, the conditional is true.
+Before we further explore the intricacies of our interpretation, we will quickly discuss the guiding principles that we used.
+<p>The guiding principles of interpretation are the following:
+<p>        1) When a valuation can be determined using the
+<p>   standard analysis, do so.
+<p>        2) There are some principles of logic that we refuse to   abandon,
+i.e.
+the principle of identity (a > a).
+<p>        3) There is a natural partial ordering on the values
+<p>     that can help determine valuations.
+The partial ordering is t>u, f>u, u>m.
+
+An example where we rely on princple (1) has already been stated.
+Namely any of the cases where the antecedent has the value f or the consequent has the value t.
+Principles (2) and (3) will come up in the course of explaining our reasoning behind the  matricies we chose.
+
+<p>Some truely interesting cases for pv4 implication start with the following:
+<p>        iv½>(m,m) ©©> t
+<p>        iv½>(u,u) ©©> t
+These two cases are similar with respect to the fact that without either of them the statement
+<p>        a > a
+would be contingent.
+We consider this to be an unacceptable result.
+Thus we rely on principle (2) in support of our decision to make the conditional operator true where both the antecedent and consequent are the same.
+<p>The next case we look at is the following:
+<p>        iv½>(u,f) ©©> u
+which stated that a statement with an undecided antecedent and a false consequent has the value of undecided.
+An practical example is the following:
+    
+<p>If Dave eats 10000 calories tomorrow, then Dave will weight 100 pounds more tomorrow.
+
+While it is undecided whether or not Dave will eat 10000 calories tomorrow, it is false under any circumstances that Dave will gain 100 pounds before tommorrow.
+At this time we assign the value u to the statement.
+If tommorrow we find that the antecedent is false, then we change our valuation to true.
+Likewise, if Dave does eat 10000 calories tommorrow, then tommorrow we assign the statement the f value.
+
+<p>Until now the cases we have considered differ little from some of the classical analysis.
+In fact, the logic we have discussed is L½3 in all but name.
+It is only with the addition of the meaningless valuation included into the same logic as the undecided valuation that pv½4 launches into uncharted waters.
+Note that we reject the B½3 solution to the interpretation of statements with at least one m value.
+That is, we do not believe that meaninglessness is infectious in regards to truth value.
+An example of such a case is the following:?
+<p>Bush was President of the U.S.
+in 1980 and green
+<p>ideas blink furiously.
+<p>    
+We can still assign the above statement the value f although we do not understand the lefthand side.
+ Thus we reject Bochvar' solution.
+<p> 
+<p>The cases that are yet to be argued for are the following:
+<p> 
+<p>        1) iv½>(t,m) ©©> u
+<p>        2) iv½>(u,m) ©©> m
+<p>        3) iv½>(m,f) ©©> u
+<p>        4) iv½>(m,u) ©©> m.
+
+Our arguments here all rely on principle (3).
+Thus we will explicate (3) throughly.
+<p>Given that priniple (1) and principle (2) fail to provide an interpretation, principle (3) judiciates among the reasonable canidates based on the canidates place in the ordering of the truth values.
+The strength of a canidate is associated with an integer.
+The following is the simple mapping on to the integers.
+<p>
+<p>        t=f= 3
+<p>        u  = 2
+<p>        m  = 1
+<p>
+Principle (3) then chooses the alternative with the least power, or if there is an alternative that falls between the values of the original two, chooses it.
+For example, where iv(p)=m and iv(q)=u, then  iv(p & q)=m.
+Alternatively, where iv(p)=t and iv(q)=m, then iv(p & q)=u.
+This principle preserves the sense of conservatism we think natural in an inferenceing system.
+That is, where a stronger inference cannot be made, don't make it.
+This is how inference integrity is maintained.
+It is clear that that the interpretation of cases (1) © (4) fall under this principle.
+The implication matrix can be represented in PROLOG with the following tables where the table predicate has the following format: define(Operator,Result,Operand_one,Operand_two)   
+
+<pre>
+<code>
+    /* row 1 */
+    define(imp,t,t,t).
+    define(imp,f,t,f).
+    define(imp,u,t,u).
+    define(imp,u,t,m).
+       
+    /* row 2 */
+    define(imp,t,f,t).
+    define(imp,t,f,f).
+    define(imp,t,f,u).
+    define(imp,t,f,m).
+
+    /* row 3 */
+    define(imp,t,u,t).
+    define(imp,u,u,f).
+    define(imp,t,u,u).
+    define(imp,m,u,m).
+
+    /* row 4 */
+    define(imp,t,m,t).
+    define(imp,u,m,f).
+    define(imp,m,m,u).
+    define(imp,t,m,m).
+
+</code>
+</pre>
+
+<p>Conjunction and disjunction in PV½4 is a superstructure of the classical two valued
+sentential logic.
+The principles of interpretation apply here just as they do for implication.
+Thus
+we arrive at the following matricies and data structures:
+<p>
+<p>
+<p>    
+<p>   &  t f u m
+<p>    +----------
+<p> t  | t f u u
+<p> f  | f f f f
+<p> u  | u f u m
+<p> m  | u f m m
+<p>        
+<p>        
+The preceding matrix can be represented with the following table where the table predicate has the following format.
+   define(Operator,Result,Operand_one,Operand_two) 
+The symbol for conjunction is "&".
+<p>
+<pre>
+<code>
+    /* row 1 */
+    define(conj,t,t,t).
+    define(conj,f,t,f).
+    define(conj,u,t,u).
+    define(conj,u,t,m).
+
+    /* row 2 */
+    define(conj,f,f,t).
+    define(conj,f,f,f).
+    define(conj,f,f,u).
+    define(conj,f,f,m).
+
+    /* row 3 */
+    define(conj,u,u,t).
+    define(conj,f,u,f).
+    define(conj,u,u,u).
+    define(conj,m,u,m).
+    
+    /* row 4 */
+    define(conj,u,m,t).
+    define(conj,f,m,f).
+    define(conj,m,m,u).
+    define(conj,m,m,m).
+</code>
+</pre>
+
+ The symbol for disjunction is "v".
+<p> v   t f u m
+<p>   +--------
+<p> t | t t t t
+<p> f | t f u u
+<p> u | t u u m
+<p> m | t u m m
+
+
+  The preceding matrix can be represented with the following table where the table predicate has the following format    define(Operator,Result,Operand_one,Operand_two)        
+
+<pre>
+<code>
+    /* row 1 */
+    define(dis,t,t,t).
+    define(dis,t,t,f).
+    define(dis,t,t,u).
+    define(dis,t,t,m).
+
+    /* row 2 */
+    define(dis,t,f,t).
+    define(dis,f,f,f).
+    define(dis,u,f,u).
+    define(dis,u,f,m).
+
+    /* row 3 */
+    define(dis,t,u,t).
+    define(dis,u,u,f).
+    define(dis,u,u,u).
+    define(dis,m,u,m).
+
+    /* row 4 */     
+    define(dis,t,m,t).
+    define(dis,u,m,f).
+    define(dis,m,m,u).
+    define(dis,m,m,m).
+</code>
+</pre>
+
+The symbol for negation is "^".
+
+<p> ^  +--
+<p> t  | f       
+<p> f  | t
+<p> u  | u
+<p> m  | m
+
+The preceding matrix can be represented with the following table  where the table predicate has the following format:         define(Operator,Result,Operand)   
+<pre>
+<code>
+    define(neg,t,f).
+    define(neg,f,t).
+    define(neg,u,u).
+    define(neg,m,m).
+</code>
+</pre>
+    
+Implementation description for gpvn.pl follows.
+
+References and Reading List :
+
+<ul>
+<li>
+<a name="[0]">[0]</a><a href="http://www.google.com/search?hl=en&ie=ISO-8859-1&q=the+problem+of+future%0Acontingents&btnG=Google+Search">Google</a> the problem of future contingents.
+<li>
+<a name="[0]">[1]</a><a href="http://sourceforge.net/projects/gpvn">gpvn</a>, GNU Polarity Valuation N-values
+<li>
+<a name="[0]">[2]</a><a href="http://cs.wwc.edu/~aabyan/Logic/MultiValued.html">Anthony Aaby</a>, survey of multivalued logic.
+<li>
+<a name="[0]">[3]</a><a href="http://www.neurocomputing.org/Logic_History/body_logic_history.html">neurocomputing organization</a>, "The Rationale for Analog Truth Value Operations in the History of Logic" by David D. Olmsted, 2000.
+</ul>
